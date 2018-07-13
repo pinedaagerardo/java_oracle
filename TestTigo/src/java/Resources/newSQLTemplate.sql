@@ -27,6 +27,7 @@ CREATE OR REPLACE PACKAGE test_pkg
 IS
     TYPE refcursortype IS REF CURSOR;
     FUNCTION get_all RETURN refcursortype;
+    PROCEDURE get_all_data(cursor_out OUT refcursortype);
     PROCEDURE insert_testtable(name_in IN testtable.name%type);
     PROCEDURE delete_testtable(id_in IN testtable.id%type);
     PROCEDURE update_testtable(id_in IN testtable.id%type, name_in IN testtable.name%type);
@@ -45,6 +46,16 @@ IS
 
         RETURN result;
     END;
+
+    PROCEDURE get_all_data(
+        cursor_out OUT refcursortype
+    ) AS
+    BEGIN
+        OPEN cursor_out FOR
+            SELECT *
+            FROM   testtable;
+
+    END get_all_data;
 
     PROCEDURE insert_testtable(
         name_in IN testtable.name%type
@@ -97,4 +108,5 @@ IS
     WHEN OTHERS THEN
         ROLLBACK;
     END;
-END;​
+END;
+​
